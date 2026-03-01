@@ -1,8 +1,9 @@
-# Version: 1.0.1
+# Version: 2.0
 
 import os
 import re
 import csv
+from datetime import datetime
 from io import StringIO
 from flask import Flask, render_template, request, jsonify, send_from_directory, send_file
 from flask_cors import CORS
@@ -141,12 +142,31 @@ def serve_audio_segment():
         app.logger.error(f"Error extracting audio segment: {e}")
         return f"Error extracting audio segment: {str(e)}", 500
 
+# @app.route('/')
+# def index():
+#     """
+#     Renders the main HTML page for the client-side audio player.
+#     """
+#     return render_template('index.html')
+
 @app.route('/')
-def index():
+def hello():
+    return f"""
+    <h1>Hello from Automated CI/CD Pipeline!</h1>
+    <p><strong>Version:</strong> 2.0 - Automated Deployment</p>
+    <p><strong>Deployed via:</strong> GitHub Actions + AWS SSM</p>
+    <p><strong>Build Date:</strong> {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}</p>
+    <p><strong>Assignment:</strong> Automated EC2 Deployment</p>
     """
-    Renders the main HTML page for the client-side audio player.
-    """
-    return render_template('index.html') 
+
+@app.route('/health')
+def health():
+    return {
+        "status": "healthy",
+        "version": "2.0",
+        "deployment_method": "automated (github-actions + ssm)",
+        "timestamp": datetime.now().isoformat()
+    }
 
 @app.route('/select_directory', methods=['POST'])
 def select_directory():
